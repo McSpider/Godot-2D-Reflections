@@ -17,7 +17,7 @@ func _draw():
 	draw_rect(Rect2(120,120,64,64),ColorN("Orange"))
 	draw_rect(Rect2(120,120,1,1),ColorN("Blue"))
 	
-	draw_rect(Rect2(512,300,64,64),ColorN("Maroon"))
+	draw_rect(Rect2(512-64,300-64,64,64),ColorN("Maroon"))
 	
 	draw_rect(Rect2(1024-16,600-16,16,16),ColorN("Orange"))
 	draw_rect(Rect2(1024-16,0,16,16),ColorN("Orange"))

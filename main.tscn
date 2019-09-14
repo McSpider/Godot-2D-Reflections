@@ -1,26 +1,38 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Render Node.gd" type="Script" id=1]
-[ext_resource path="res://KinematicBody2D.gd" type="Script" id=2]
-[ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource path="res://Red.png" type="Texture" id=2]
+[ext_resource path="res://KinematicBody2D.gd" type="Script" id=3]
+[ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://Follow Camera2D.gd" type="Script" id=5]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("Viewport")
 
-[sub_resource type="VisualShaderNodeInput" id=18]
+[sub_resource type="VisualShaderNodeScalarOp" id=13]
+default_input_values = [ 0, 1.0, 1, -1.0 ]
+operator = 1
+
+[sub_resource type="VisualShaderNodeInput" id=2]
 output_port_for_preview = 0
 input_name = "uv"
 
-[sub_resource type="VisualShaderNodeTextureUniform" id=21]
+[sub_resource type="VisualShaderNodeTextureUniform" id=3]
 uniform_name = "TextureUniform"
 
-[sub_resource type="VisualShaderNodeTexture" id=22]
-texture = ExtResource( 3 )
+[sub_resource type="VisualShaderNodeTexture" id=4]
+texture = ExtResource( 4 )
 
-[sub_resource type="VisualShaderNodeInput" id=23]
+[sub_resource type="VisualShaderNodeInput" id=5]
 input_name = "screen_uv"
 
-[sub_resource type="VisualShader" id=16]
+[sub_resource type="VisualShaderNodeScalarOp" id=11]
+operator = 1
+
+[sub_resource type="VisualShaderNodeScalarOp" id=12]
+operator = 6
+
+[sub_resource type="VisualShader" id=6]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 uniform sampler2D tex_frg_6;uniform sampler2D TextureUniform;
@@ -57,9 +69,23 @@ void fragment() {
 		n_out5p1 = n_tex_read.a;
 	}
 
+// ScalarOp:10
+	float n_in10p0 = 1.00000;
+	float n_out10p0;
+	n_out10p0 = n_in10p0 - n_out5p1;
+
+// ScalarOp:8
+	float n_out8p0;
+	n_out8p0 = n_out6p1 - n_out10p0;
+
+// ScalarOp:9
+	float n_in9p1 = 0.00000;
+	float n_out9p0;
+	n_out9p0 = max( n_out8p0 , n_in9p1 );
+
 // Output:0
 	COLOR.rgb = n_out6p0;
-	COLOR.a = n_out5p1;
+	COLOR.a = n_out9p0;
 
 }
 
@@ -68,33 +94,39 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -419.685, -119.087 )
+graph_offset = Vector2( -266.64, -37.487 )
 mode = 1
 flags/light_only = false
-nodes/fragment/0/position = Vector2( 420, 140 )
-nodes/fragment/2/node = SubResource( 18 )
+nodes/fragment/0/position = Vector2( 600, 0 )
+nodes/fragment/2/node = SubResource( 2 )
 nodes/fragment/2/position = Vector2( 20, -120 )
-nodes/fragment/5/node = SubResource( 21 )
-nodes/fragment/5/position = Vector2( 40, 140 )
-nodes/fragment/6/node = SubResource( 22 )
+nodes/fragment/5/node = SubResource( 3 )
+nodes/fragment/5/position = Vector2( -200, 120 )
+nodes/fragment/6/node = SubResource( 4 )
 nodes/fragment/6/position = Vector2( 200, -120 )
-nodes/fragment/7/node = SubResource( 23 )
-nodes/fragment/7/position = Vector2( -160, 140 )
-nodes/fragment/connections = PoolIntArray( 2, 0, 6, 0, 7, 0, 5, 0, 6, 0, 0, 0, 5, 1, 0, 1 )
+nodes/fragment/7/node = SubResource( 5 )
+nodes/fragment/7/position = Vector2( -200, 60 )
+nodes/fragment/8/node = SubResource( 11 )
+nodes/fragment/8/position = Vector2( 280, 140 )
+nodes/fragment/9/node = SubResource( 12 )
+nodes/fragment/9/position = Vector2( 280, 240 )
+nodes/fragment/10/node = SubResource( 13 )
+nodes/fragment/10/position = Vector2( 80, 140 )
+nodes/fragment/connections = PoolIntArray( 2, 0, 6, 0, 7, 0, 5, 0, 6, 0, 0, 0, 6, 1, 8, 0, 8, 0, 9, 0, 9, 0, 0, 1, 10, 0, 8, 1, 5, 1, 10, 1 )
 
-[sub_resource type="ViewportTexture" id=24]
+[sub_resource type="ViewportTexture" id=7]
 viewport_path = NodePath("Viewport")
 
-[sub_resource type="ShaderMaterial" id=17]
+[sub_resource type="ShaderMaterial" id=8]
 resource_local_to_scene = true
-shader = SubResource( 16 )
-shader_param/TextureUniform = SubResource( 24 )
+shader = SubResource( 6 )
+shader_param/TextureUniform = SubResource( 7 )
 
-[sub_resource type="StreamTexture" id=2]
-flags = 4
+[sub_resource type="StreamTexture" id=9]
+flags = 7
 load_path = "res://.import/icon.png-487276ed1e3a0c39cad0279d744ee560.stex"
 
-[sub_resource type="CircleShape2D" id=25]
+[sub_resource type="CircleShape2D" id=10]
 
 [node name="Node2D" type="Control"]
 anchor_right = 1.0
@@ -111,9 +143,21 @@ render_target_update_mode = 3
 [node name="Render Node" type="Node2D" parent="Viewport"]
 script = ExtResource( 1 )
 
+[node name="Node2D" type="Node2D" parent="Viewport"]
+
+[node name="Camera2D" type="Camera2D" parent="Viewport/Node2D"]
+current = true
+
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+
+[node name="Mirrors Reference" type="Sprite" parent="ViewportContainer"]
+modulate = Color( 1, 1, 1, 0.392157 )
+z_index = -10
+texture = SubResource( 1 )
+centered = false
+flip_v = true
 
 [node name="Viewport" type="Viewport" parent="ViewportContainer"]
 size = Vector2( 1024, 600 )
@@ -121,22 +165,36 @@ transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 3
 
-[node name="Mirrors Reference" type="Sprite" parent="ViewportContainer/Viewport"]
-texture = SubResource( 1 )
-centered = false
-flip_v = true
+[node name="Sprite" type="Sprite" parent="ViewportContainer/Viewport"]
+texture = ExtResource( 2 )
+offset = Vector2( 448, 236 )
+
+[node name="Sprite2" type="Sprite" parent="ViewportContainer/Viewport"]
+texture = ExtResource( 2 )
+offset = Vector2( 512, 300 )
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="ViewportContainer/Viewport"]
-script = ExtResource( 2 )
+script = ExtResource( 3 )
 
 [node name="Reflection" type="Sprite" parent="ViewportContainer/Viewport/KinematicBody2D"]
 modulate = Color( 1, 1, 1, 0.784314 )
-material = SubResource( 17 )
+material = SubResource( 8 )
 position = Vector2( -10, -10 )
-texture = SubResource( 2 )
+texture = SubResource( 9 )
+
+[node name="Reflection2" type="Sprite" parent="ViewportContainer/Viewport/KinematicBody2D"]
+modulate = Color( 1, 1, 1, 0.784314 )
+material = SubResource( 8 )
+position = Vector2( 0, 64 )
+texture = SubResource( 9 )
+flip_v = true
 
 [node name="Character" type="Sprite" parent="ViewportContainer/Viewport/KinematicBody2D"]
-texture = SubResource( 2 )
+texture = SubResource( 9 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ViewportContainer/Viewport/KinematicBody2D"]
-shape = SubResource( 25 )
+shape = SubResource( 10 )
+
+[node name="Camera2D" type="Camera2D" parent="ViewportContainer/Viewport/KinematicBody2D"]
+current = true
+script = ExtResource( 5 )
