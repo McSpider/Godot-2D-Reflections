@@ -16,6 +16,8 @@ _global_script_class_icons={
 [application]
 
 config/name="Reflections"
+run/main_scene="res://pokemon.tscn"
+run/disable_stdout=true
 config/icon="res://icon.png"
 
 [rendering]
