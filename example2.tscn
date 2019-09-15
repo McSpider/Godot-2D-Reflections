@@ -1,9 +1,10 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Render Node.gd" type="Script" id=1]
-[ext_resource path="res://Red.png" type="Texture" id=2]
-[ext_resource path="res://KinematicBody2D.gd" type="Script" id=3]
-[ext_resource path="res://Follow Camera2D.gd" type="Script" id=4]
+[ext_resource path="res://Viewport.gd" type="Script" id=2]
+[ext_resource path="res://Red.png" type="Texture" id=3]
+[ext_resource path="res://KinematicBody2D.gd" type="Script" id=4]
+[ext_resource path="res://Follow Camera2D.gd" type="Script" id=5]
 
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("Viewport")
@@ -154,6 +155,7 @@ current = true
 [node name="ViewportContainer" type="ViewportContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+stretch = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -170,17 +172,18 @@ size = Vector2( 1024, 600 )
 transparent_bg = true
 handle_input_locally = false
 render_target_update_mode = 3
+script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="ViewportContainer/Viewport"]
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 offset = Vector2( 448, 236 )
 
 [node name="Sprite2" type="Sprite" parent="ViewportContainer/Viewport"]
-texture = ExtResource( 2 )
+texture = ExtResource( 3 )
 offset = Vector2( 512, 300 )
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="ViewportContainer/Viewport"]
-script = ExtResource( 3 )
+script = ExtResource( 4 )
 
 [node name="Reflection" type="Sprite" parent="ViewportContainer/Viewport/KinematicBody2D"]
 modulate = Color( 1, 1, 1, 0.784314 )
@@ -196,4 +199,4 @@ shape = SubResource( 13 )
 
 [node name="Camera2D" type="Camera2D" parent="ViewportContainer/Viewport/KinematicBody2D"]
 current = true
-script = ExtResource( 4 )
+script = ExtResource( 5 )
