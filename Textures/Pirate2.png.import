@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Robot.png-bc507c32d760d460fd4d25d5637318c4.stex"
+path="res://.import/Pirate2.png-6ea89fc4561acdf225ca1a5d2d23df4a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Textures/Robot.png"
-dest_files=[ "res://.import/Robot.png-bc507c32d760d460fd4d25d5637318c4.stex" ]
+source_file="res://Textures/Pirate2.png"
+dest_files=[ "res://.import/Pirate2.png-6ea89fc4561acdf225ca1a5d2d23df4a.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
