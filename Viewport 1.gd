@@ -14,10 +14,13 @@ func _ready():
 	
 func add_robots(count):
 	for x in range(0,count):
-		var robot = $Robot.duplicate()
-		self.add_child(robot)
-		num_robots += 1
+		call_deferred("add_robot")
 		OS.delay_msec(5)
+
+func add_robot():
+	var robot = $Robot.duplicate()
+	self.add_child(robot)
+	num_robots += 1
 
 func _process(delta):
 	$Panel/Label.text = "Robots: " + str(num_robots) + "\r\nFPS: " + str(Engine.get_frames_per_second())

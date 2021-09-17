@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 var speed = 20
-var velocity = Vector2()
+var velocity = Vector2(speed, 0)
 
 func _ready():
 	randomize()

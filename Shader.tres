@@ -1,28 +1,24 @@
-[gd_resource type="ShaderMaterial" load_steps=10 format=2]
+[gd_resource type="ShaderMaterial" load_steps=9 format=2]
 
-[sub_resource type="VisualShaderNodeScalarOp" id=1]
-default_input_values = [ 0, 1.0, 1, -1.0 ]
-operator = 1
-
-[sub_resource type="VisualShaderNodeTexture" id=2]
+[sub_resource type="VisualShaderNodeTexture" id=1]
 source = 2
 
-[sub_resource type="VisualShaderNodeInput" id=3]
+[sub_resource type="VisualShaderNodeInput" id=2]
 input_name = "uv"
 
-[sub_resource type="VisualShaderNodeTextureUniform" id=4]
+[sub_resource type="VisualShaderNodeTextureUniform" id=3]
 uniform_name = "TextureUniform"
 
-[sub_resource type="VisualShaderNodeInput" id=5]
+[sub_resource type="VisualShaderNodeInput" id=4]
 input_name = "screen_uv"
 
+[sub_resource type="VisualShaderNodeScalarOp" id=5]
+operator = 2
+
 [sub_resource type="VisualShaderNodeScalarOp" id=6]
-operator = 1
+operator = 3
 
-[sub_resource type="VisualShaderNodeScalarOp" id=7]
-operator = 6
-
-[sub_resource type="VisualShader" id=8]
+[sub_resource type="VisualShader" id=7]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 uniform sampler2D TextureUniform;
@@ -36,48 +32,38 @@ void vertex() {
 
 void fragment() {
 // Input:2
-	vec3 n_out2p0;
-	n_out2p0 = vec3(UV,0.0);
+	vec3 n_out2p0 = vec3(UV, 0.0);
 
 // Texture:11
 	vec3 n_out11p0;
 	float n_out11p1;
 	{
-		vec4 _tex_read = texture( TEXTURE , n_out2p0.xy );
+		vec4 _tex_read = texture(TEXTURE, n_out2p0.xy);
 		n_out11p0 = _tex_read.rgb;
 		n_out11p1 = _tex_read.a;
 	}
 
+// ScalarOp:9
+	float n_out9p0 = dot(n_out11p0, vec3(0.333333, 0.333333, 0.333333)) / n_out11p1;
+
 // Input:7
-	vec3 n_out7p0;
-	n_out7p0 = vec3(SCREEN_UV,0.0);
+	vec3 n_out7p0 = vec3(SCREEN_UV, 0.0);
 
 // TextureUniform:5
 	vec3 n_out5p0;
 	float n_out5p1;
 	{
-		vec4 n_tex_read = texture( TextureUniform , n_out7p0.xy );
+		vec4 n_tex_read = texture(TextureUniform, n_out7p0.xy);
 		n_out5p0 = n_tex_read.rgb;
 		n_out5p1 = n_tex_read.a;
 	}
 
-// ScalarOp:10
-	float n_in10p0 = 1.00000;
-	float n_out10p0;
-	n_out10p0 = n_in10p0 - n_out5p1;
-
 // ScalarOp:8
-	float n_out8p0;
-	n_out8p0 = n_out11p1 - n_out10p0;
-
-// ScalarOp:9
-	float n_in9p1 = 0.00000;
-	float n_out9p0;
-	n_out9p0 = max( n_out8p0 , n_in9p1 );
+	float n_out8p0 = n_out11p1 * n_out5p1;
 
 // Output:0
-	COLOR.rgb = n_out11p0;
-	COLOR.a = n_out9p0;
+	COLOR.rgb = vec3(n_out9p0);
+	COLOR.a = n_out8p0;
 
 }
 
@@ -86,30 +72,28 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -186.156, -105.899 )
+graph_offset = Vector2( -121.387, 115.148 )
 mode = 1
 flags/light_only = false
-nodes/fragment/0/position = Vector2( 520, 0 )
-nodes/fragment/2/node = SubResource( 3 )
+nodes/fragment/0/position = Vector2( 500, 120 )
+nodes/fragment/2/node = SubResource( 2 )
 nodes/fragment/2/position = Vector2( 40, -60 )
-nodes/fragment/5/node = SubResource( 4 )
+nodes/fragment/5/node = SubResource( 3 )
 nodes/fragment/5/position = Vector2( 40, 120 )
-nodes/fragment/7/node = SubResource( 5 )
-nodes/fragment/7/position = Vector2( 40, 60 )
-nodes/fragment/8/node = SubResource( 6 )
+nodes/fragment/7/node = SubResource( 4 )
+nodes/fragment/7/position = Vector2( 40, 40 )
+nodes/fragment/8/node = SubResource( 5 )
 nodes/fragment/8/position = Vector2( 280, 140 )
-nodes/fragment/9/node = SubResource( 7 )
-nodes/fragment/9/position = Vector2( 280, 240 )
-nodes/fragment/10/node = SubResource( 1 )
-nodes/fragment/10/position = Vector2( 40, 280 )
-nodes/fragment/11/node = SubResource( 2 )
+nodes/fragment/9/node = SubResource( 6 )
+nodes/fragment/9/position = Vector2( 500, -60 )
+nodes/fragment/11/node = SubResource( 1 )
 nodes/fragment/11/position = Vector2( 280, -60 )
-nodes/fragment/connections = PoolIntArray( 7, 0, 5, 0, 8, 0, 9, 0, 9, 0, 0, 1, 10, 0, 8, 1, 5, 1, 10, 1, 2, 0, 11, 0, 11, 0, 0, 0, 11, 1, 8, 0 )
+nodes/fragment/connections = PoolIntArray( 7, 0, 5, 0, 2, 0, 11, 0, 11, 1, 8, 0, 5, 1, 8, 1, 8, 0, 0, 1, 11, 0, 9, 0, 11, 1, 9, 1, 9, 0, 0, 0 )
 
-[sub_resource type="ViewportTexture" id=9]
+[sub_resource type="ViewportTexture" id=8]
 viewport_path = NodePath("Viewport")
 
 [resource]
 resource_local_to_scene = true
-shader = SubResource( 8 )
-shader_param/TextureUniform = SubResource( 9 )
+shader = SubResource( 7 )
+shader_param/TextureUniform = SubResource( 8 )
